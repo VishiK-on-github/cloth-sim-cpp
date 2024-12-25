@@ -8,33 +8,43 @@ public:
     sf::Vector2f pos;
     sf::Vector2f prev_pos;
     sf::Vector2f acc;
+    bool is_pinned;
 
-    Particle(float x, float y) : pos(x, y), prev_pos(x, y), acc(0, 0) {}
-
-    void apply_force(const sf::Vector2f& force) {
-        acc += force;
+    Particle(float x, float y, bool pinned)
+        : pos(x, y)
+        , prev_pos(x, y)
+        , acc(0, 0)
+        , is_pinned(pinned)
+    {
     }
 
-    void update(float time_step) {
-        sf::Vector2f velocity = pos - prev_pos;
-        prev_pos = pos;
-        pos += velocity + acc * time_step * time_step;
-        acc = sf::Vector2f(0, 0);
+    void apply_force(const sf::Vector2f& force)
+    {
+        if (!is_pinned) {
+            acc += force;
+        }
     }
 
-    void constraint_to_screen(float width, float height, float radius) {
-        if (pos.x < radius) {
-            pos.x = radius;
+    void update(float time_step)
+    {
+        if (!is_pinned) {
+            sf::Vector2f velocity = pos - prev_pos;
+            prev_pos = pos;
+            pos += velocity + acc * time_step * time_step;
+            acc = sf::Vector2f(0, 0);
         }
-        if (pos.x > width - radius) {
-            pos.x = width - radius;
-        }
-        if (pos.y < radius) {
-            pos.y = radius;
-        }
-        if (pos.y > height - radius) {
-            pos.y = height - radius;
-        }
+    }
+
+    void constraint_to_screen(float width, float height)
+    {
+        if (pos.x < 0)
+            pos.x = 0;
+        if (pos.x > width)
+            pos.x = width;
+        if (pos.y < 0)
+            pos.y = 0;
+        if (pos.y > height)
+            pos.y = height;
     }
 };
 

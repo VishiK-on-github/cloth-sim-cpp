@@ -15,7 +15,7 @@ $(TARGET): $(OBJ)
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-clean:
+clear:
 	rm -f $(TARGET) $(OBJ)
 
 run:
