@@ -6,8 +6,7 @@ TARGET = main
 SRC = main.cpp
 OBJ = $(SRC:.cpp=.o)
 
-# TODO: change compile and execution
-all: $(TARGET)
+build: $(TARGET)
 
 $(TARGET): $(OBJ)
 	$(CXX) $(OBJ) -o $(TARGET) $(LDFLAGS)
@@ -20,3 +19,6 @@ clear:
 
 run:
 	./main
+
+all:
+	make clear && make build && make run
